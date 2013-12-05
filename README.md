@@ -17,11 +17,11 @@ For more information, please see https://wout.ly
 
 ## Bug Tracker
 
-Found a bug? Report it [here](https://github.com/woutly/woutly-website/issues/)!
+Found a bug? Report it [here](https://github.com/woutly/woutly-android/issues/)!
 
 ## Feature Request
 
-Have an idea? Add it [here](https://github.com/woutly/woutly-website/issues/)!
+Have an idea? Add it [here](https://github.com/woutly/woutly-android/issues/)!
 
 ## License
 
