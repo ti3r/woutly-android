@@ -3,7 +3,7 @@
 
 Incentivisation platform that rewards you for achieving your fitness goals.
 
-For more information, please see https://wout.ly
+For more information, please see http://wout.ly
 
 > _Warning: Woutly is experimental, early-stage software. There may be flaws._
 
