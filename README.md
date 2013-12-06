@@ -11,7 +11,7 @@ For more information, please see http://wout.ly
 
 ## Use Case
 
-John's goal is to lose 50 pounds. He sets his goal into the application and along the way he will be incentivized for his hard work. After a tough workout, he adds his workout into the application and instantly receives a complementary product from a nearby store (or one of the many other rewards and products available in the database).
+John's goal is to lose 50 pounds. He sets his goal into the application and along the way he will be incentivized for his hard work. While at the gym, he adds his workout into the application and instantly receives a complementary product from a nearby store (or one of the many other rewards and products available in the database).
 
 ## Rewards 
 
