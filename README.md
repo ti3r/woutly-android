@@ -34,7 +34,7 @@ Examples:
 * Find a workout partner nearby
 * Don't like your reward? Trade it! :-)
 * Share achievements on social networks
-* Community events: Brands/Stores post their own challenges for users to achieve and they'll be rewarded for achieving them.
+* Community events: Brands and Retailers post their own challenges for users to achieve and they'll be rewarded for achieving them.
 
 ## Brands & Retailers
 
