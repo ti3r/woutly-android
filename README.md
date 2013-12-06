@@ -3,11 +3,59 @@
 
 Incentivisation platform that rewards you for achieving your fitness goals.
 
+Receive complementary offers and coupons from your favorite brands and stores.
+
 For more information, please see http://wout.ly
 
 > _Warning: Woutly is experimental, early-stage software. There may be flaws._
 
+## Use Case
+
+My goal is to lose 50 pounds. Set that into the application and along the way you'll be incentivized for your hard work. After a tough workout, you add what you did onto your phone and you'll instantly receive a complementary product from a nearby store or one of the many other rewards and products available in the database.
+
+## Rewards 
+
+Examples: 
+
+* Smoothie from Smoothie King
+* Vitamins from Vitamin World
+* Whey Protein Supplement from GNC
+
+**_Redeemable instantaneously at a nearby location._**
+
+**_The rewards will be oriented towards the goals you're aiming to achieve!_** (Users won't receive a reward for a cheeseburger if their goal is to lose weight.)
+
+## Special Aspects
+
+* Track your workouts
+* Learn about workouts
+* Q&A Forum
+* Connect with friends
+* Find a workout partner nearby
+* Don't like your reward? Trade it! :-)
+* Share achievements on social networks
+* Community events: Brands/Stores post their own challenges for users to achieve and they'll be rewarded for achieving them.
+
+## Brands & Retailers
+
+* Reward Customers
+* Test New Products
+* Generate Feedback 
+* Increase Customer Loyalty
+* Increase Brand / Store Recognition
+ 
+## Monetization
+
+**Freemium Revenue Model**
+
+* Free Application  
+* Non-Intrusive Advertising (Non-Traditional Advertisements)
+* Premium Services:
+Monthly Subscription for Dietetic Services, Meal Plan, Consultation, Workout Plan from professionals.
+
 ## Contributing
+
+Health 2.0 is on the rise! Join Woutly!
 
 1. [Fork it](https://help.github.com/articles/fork-a-repo)
 2. Create your feature branch (`git checkout -b my-new-feature`)
@@ -17,11 +65,11 @@ For more information, please see http://wout.ly
 
 ## Bug Tracker
 
-Found a bug? Report it [here](https://github.com/woutly/woutly-android/issues/)!
+Found a bug? Report it [here](https://github.com/woutly/woutly-ios/issues/)!
 
 ## Feature Request
 
-Have an idea? Add it [here](https://github.com/woutly/woutly-android/issues/)!
+Have an idea? Add it [here](https://github.com/woutly/woutly-ios/issues/)!
 
 ## License
 
