@@ -16,6 +16,7 @@
 package org.woutly.android;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -37,6 +38,7 @@ import android.widget.TextView;
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
+    public static final String APP_TAG = "WoutlyAndroid";
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
@@ -64,11 +66,37 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
+        if (position < 3){
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment frag = pickFragmentForPosition(position);
         fragmentManager.beginTransaction()
-                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
-                .commit();
+                .replace(R.id.container, frag).commit();
+        }
+        else{
+            launchSettingsActivity();
+        }
+    }
+
+    private Fragment pickFragmentForPosition(int position) {
+        Fragment result = null;
+        switch (position){
+            case 0:
+            case 1:
+                result = PlaceholderFragment.newInstance(position+1);
+                break;
+            case 2:
+                result = GoalsFragment.newInstance();
+                break;
+        }
+        return result;
+    }
+
+    private void launchSettingsActivity() {
+        Intent i = new Intent();
+        i.setAction(SettingsMainFragment.INTENT_NAME);
+        i.addCategory(Intent.CATEGORY_DEFAULT);
+        startActivity(i);
     }
 
     public void onSectionAttached(int number) {
@@ -80,7 +108,7 @@ public class MainActivity extends ActionBarActivity
                 mTitle = getString(R.string.title_section2);
                 break;
             case 3:
-                mTitle = getString(R.string.title_section3);
+                mTitle = getString(R.string.title_goals);
                 break;
         }
     }

@@ -5,7 +5,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="7"
+        android:minSdkVersion="11"
         android:targetSdkVersion="19" />
 
     <application
@@ -22,6 +22,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="org.woutly.android.SettingsMainFragment"
+            android:label="@string/action_settings" >
+                <intent-filter>
+                    <action android:name="org.woutly.android.SETTINGS" />
+                    <category android:name="android.intent.category.DEFAULT" />
+                </intent-filter>
+
+            </activity>
     </application>
 
 </manifest>

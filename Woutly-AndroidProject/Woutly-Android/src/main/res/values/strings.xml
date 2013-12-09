@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Woutly-Android</string>
+    <string name="app_name">Woutly Android</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
+    <string name="title_goals">Goals</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
     <string name="action_settings">Settings</string>
+    <string name="settings_group_accounts">Accounts</string><string name="fragment_goals_txt_goal">Goal</string><string name="fragment_goals_btn_add">Add</string>
+
+    <string-array name="navigation_drawer_options">
+        <item>Section 1</item>
+        <item>Section 2</item>
+        <item>Goals</item>
+        <item>Settings</item>
+    </string-array>
 
 </resources>
