@@ -20,6 +20,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.support.ConnectionSource;
+
 import com.j256.ormlite.support.DatabaseConnection;
 
 import java.sql.SQLException;
@@ -45,18 +46,18 @@ public class WoutlyDbHelper extends OrmLiteSqliteOpenHelper{
             DatabaseConnection connection = connectionSource.getReadWriteConnection();
             Savepoint savePoint = null;
 
-            if (connection.isAutoCommitSupported()){
-                connection.setAutoCommit(true);
-            }else{
-                savePoint = connection.setSavePoint("createSavePoint");
-            }
+            //if (connection.isAutoCommitSupported()){
+            //    connection.setAutoCommit(true);
+            //}else{
+            //    savePoint = connection.setSavePoint("createSavePoint");
+            //}
 
             connection.executeStatement("CREATE TABLE GOALS (_id INTEGER PRIMARY KEY AUTOINCREMENT, goal TEXT, rank INTEGER default 5)",
                     DatabaseConnection.DEFAULT_RESULT_FLAGS);
 
             //Commit if not commit supported
-            if (!connection.isAutoCommitSupported())
-                connection.commit(savePoint);
+            //if (!connection.isAutoCommitSupported())
+            //    connection.commit(savePoint);
         } catch (SQLException e) {
             throw new IllegalStateException("Unable to create Database for Application.",e);
         }

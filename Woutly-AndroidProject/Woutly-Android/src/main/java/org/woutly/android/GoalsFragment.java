@@ -16,24 +16,32 @@
 package org.woutly.android;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.inject.Inject;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.PreparedQuery;
 
 import org.woutly.android.db.WoutlyDbHelper;
 import org.woutly.android.db.entities.Goal;
+import org.woutly.android.loaders.GoalsAsyncLoader;
 
 import java.sql.SQLException;
+import java.util.Collection;
 
 import static org.woutly.android.MainActivity.APP_TAG;
 /**
@@ -46,6 +54,7 @@ public class GoalsFragment extends Fragment implements View.OnClickListener {
     EditText edtGoal = null;
     Button btnAdd = null;
     OrmLiteSqliteOpenHelper helper = null;
+    FrameLayout frmGoals;
 
     public static GoalsFragment newInstance(){
         GoalsFragment fragment = new GoalsFragment();
@@ -60,6 +69,20 @@ public class GoalsFragment extends Fragment implements View.OnClickListener {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         helper = OpenHelperManager.getHelper(activity, WoutlyDbHelper.class);
+        executeloadGoals();
+    }
+
+    private void executeloadGoals() {
+
+            GoalsAsyncLoader loader = new GoalsAsyncLoader(helper);
+            loader.execute();
+
+        //Collection<Goal> goals = loadGoal
+                    //Log.d(APP_TAG,"Collection goals returned size: "+goals.size());
+                    //TextView label = new TextView(getActivity().getBaseContext());
+                    //label.setText("Size of the collection: "+goals.size());
+
+
     }
 
     @Override
@@ -74,6 +97,7 @@ public class GoalsFragment extends Fragment implements View.OnClickListener {
         edtGoal = (EditText) v.findViewById(R.id.fragment_goals_edt_goal);
         btnAdd = (Button) v.findViewById(R.id.fragment_goals_btn_add);
         btnAdd.setOnClickListener(this);
+        frmGoals = (FrameLayout) v.findViewById(R.id.fragment_goals_frm_goals);
         return v;
     }
 
