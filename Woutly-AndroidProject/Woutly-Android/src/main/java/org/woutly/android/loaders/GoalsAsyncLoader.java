@@ -15,20 +15,22 @@
  */
 package org.woutly.android.loaders;
 
-import android.content.AsyncTaskLoader;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.PreparedQuery;
 
-import org.woutly.android.db.WoutlyDbHelper;
 import org.woutly.android.db.entities.Goal;
 
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 import static org.woutly.android.MainActivity.APP_TAG;
 /**
@@ -36,13 +38,17 @@ import static org.woutly.android.MainActivity.APP_TAG;
  *
  * @author Alexandro Blanco <ti3r.bubblenet@gmail.com>
  */
-public class GoalsAsyncLoader extends AsyncTask<Void,Void,Collection<Goal>> {
+public class GoalsAsyncLoader extends AsyncTask<Void,Void,ArrayAdapter<String>> {
 
     Dao goalsDao;
+    Context context;
+    ListView finalView;
 
-    public GoalsAsyncLoader(OrmLiteSqliteOpenHelper helper) {
+    public GoalsAsyncLoader(Context context, OrmLiteSqliteOpenHelper helper, ListView listView) {
         try {
             this.goalsDao = helper.getDao(Goal.class);
+            this.context = context;
+            this.finalView = listView;
         } catch (SQLException e) {
             Log.e(APP_TAG,"Error retrieving dao for goals async loader. Failing app",e);
             throw new ExceptionInInitializerError("Error initializing Goals Async Loader. " + e.getMessage());
@@ -50,21 +56,35 @@ public class GoalsAsyncLoader extends AsyncTask<Void,Void,Collection<Goal>> {
     }
 
     @Override
-    protected Collection<Goal> doInBackground(Void... voids) {
+    protected ArrayAdapter<String> doInBackground(Void... voids) {
         Collection<Goal> goals = null;
+        ArrayAdapter<String> adapter = null;
+        List<String> titles = new LinkedList<String>();
         try {
             Log.d(APP_TAG,"Loading goals using back task. Thread name"+Thread.currentThread().getName());
             goals = loadGoals();
+            for(Goal goal : goals){
+                titles.add(goal.getGoal());
+            }
+            Object[] array =  titles.toArray();
+            adapter =  new ArrayAdapter(this.context, android.R.layout.simple_list_item_1, array);
+            //ArrayAdapter<String>(this.context, android.R.layout.simple_list_item_1, array);
+            Log.d(APP_TAG, "Adapter created: "+adapter.toString());
         } catch (SQLException e) {
             Log.e(APP_TAG,"Error while loading the goals",e);
         }
 
-        return goals;
+        return adapter;
     }
 
     @Override
-    protected void onPostExecute(Collection<Goal> goals) {
-        Log.d(APP_TAG, "Goals loaded "+goals.size()+". Current thread name "+Thread.currentThread().getName());
+    protected void onPostExecute(ArrayAdapter<String> stringArrayAdapter) {
+        Log.d(APP_TAG, "Goals loaded " + stringArrayAdapter.getCount() + ". Current thread name " + Thread.currentThread().getName());
+        if (finalView == null){
+            throw new IllegalStateException("Illegal state List View is null");
+        }
+        finalView.setAdapter(stringArrayAdapter);
+        stringArrayAdapter.notifyDataSetChanged();
     }
 
     private Collection<Goal> loadGoals() throws SQLException {
