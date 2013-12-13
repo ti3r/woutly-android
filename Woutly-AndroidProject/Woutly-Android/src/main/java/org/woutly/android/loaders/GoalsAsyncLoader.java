@@ -68,7 +68,6 @@ public class GoalsAsyncLoader extends AsyncTask<Void,Void,ArrayAdapter<String>> 
             }
             Object[] array =  titles.toArray();
             adapter =  new ArrayAdapter(this.context, android.R.layout.simple_list_item_1, array);
-            //ArrayAdapter<String>(this.context, android.R.layout.simple_list_item_1, array);
             Log.d(APP_TAG, "Adapter created: "+adapter.toString());
         } catch (SQLException e) {
             Log.e(APP_TAG,"Error while loading the goals",e);
