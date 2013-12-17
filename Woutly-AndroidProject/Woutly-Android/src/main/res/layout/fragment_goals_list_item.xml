@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Goal...."
+        android:id="@+id/fragment_goals_list_item_txt_goal"
+        android:layout_alignParentTop="true"
+        android:gravity="center_horizontal"
+        android:layout_centerHorizontal="true" />
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="25dip"
+        android:layout_below="@id/fragment_goals_list_item_txt_goal"
+        android:clickable="false"
+        android:focusable="false"
+        android:indeterminateBehavior="repeat"
+        android:indeterminateOnly="false"
+        android:indeterminate="false"
+        android:progress="50"
+        android:id="@+id/fragment_goals_list_item_prg_progress"
+        android:max="100" />
+</RelativeLayout>

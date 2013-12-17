@@ -18,13 +18,14 @@ package org.woutly.android.loaders;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.PreparedQuery;
 
+import org.woutly.android.adapters.GoalsListAdapter;
 import org.woutly.android.db.entities.Goal;
 
 import java.sql.SQLException;
@@ -38,7 +39,7 @@ import static org.woutly.android.MainActivity.APP_TAG;
  *
  * @author Alexandro Blanco <ti3r.bubblenet@gmail.com>
  */
-public class GoalsAsyncLoader extends AsyncTask<Void,Void,ArrayAdapter<String>> {
+public class GoalsAsyncLoader extends AsyncTask<Void,Void,ListAdapter> {
 
     Dao goalsDao;
     Context context;
@@ -56,18 +57,15 @@ public class GoalsAsyncLoader extends AsyncTask<Void,Void,ArrayAdapter<String>> 
     }
 
     @Override
-    protected ArrayAdapter<String> doInBackground(Void... voids) {
+    protected GoalsListAdapter doInBackground(Void... voids) {
         Collection<Goal> goals = null;
-        ArrayAdapter<String> adapter = null;
+        GoalsListAdapter adapter = null;
         List<String> titles = new LinkedList<String>();
         try {
             Log.d(APP_TAG,"Loading goals using back task. Thread name"+Thread.currentThread().getName());
             goals = loadGoals();
-            for(Goal goal : goals){
-                titles.add(goal.getGoal());
-            }
-            Object[] array =  titles.toArray();
-            adapter =  new ArrayAdapter(this.context, android.R.layout.simple_list_item_1, array);
+
+            adapter =  new GoalsListAdapter(this.context, goals);
             Log.d(APP_TAG, "Adapter created: "+adapter.toString());
         } catch (SQLException e) {
             Log.e(APP_TAG,"Error while loading the goals",e);
@@ -77,13 +75,12 @@ public class GoalsAsyncLoader extends AsyncTask<Void,Void,ArrayAdapter<String>> 
     }
 
     @Override
-    protected void onPostExecute(ArrayAdapter<String> stringArrayAdapter) {
+    protected void onPostExecute(ListAdapter stringArrayAdapter) {
         Log.d(APP_TAG, "Goals loaded " + stringArrayAdapter.getCount() + ". Current thread name " + Thread.currentThread().getName());
         if (finalView == null){
             throw new IllegalStateException("Illegal state List View is null");
         }
         finalView.setAdapter(stringArrayAdapter);
-        stringArrayAdapter.notifyDataSetChanged();
     }
 
     private Collection<Goal> loadGoals() throws SQLException {
