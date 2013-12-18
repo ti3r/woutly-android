@@ -25,11 +25,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
 
+import org.woutly.android.adapters.GoalsListAdapter;
+import org.woutly.android.adapters.GoalsListItemSelectedListener;
 import org.woutly.android.db.WoutlyDbHelper;
 import org.woutly.android.db.entities.Goal;
 import org.woutly.android.loaders.GoalsAsyncLoader;
@@ -42,7 +45,7 @@ import static org.woutly.android.MainActivity.APP_TAG;
  *
  * @author Alexandro Blanco <ti3r.bubblenet@gmail.com>
  */
-public class GoalsFragment extends Fragment implements View.OnClickListener {
+public class GoalsFragment extends Fragment implements View.OnClickListener, GoalsListItemSelectedListener {
 
     EditText edtGoal = null;
     Button btnAdd = null;
@@ -65,7 +68,7 @@ public class GoalsFragment extends Fragment implements View.OnClickListener {
     }
 
     private void executeloadGoals() {
-            GoalsAsyncLoader loader = new GoalsAsyncLoader(getActivity(), helper, frmGoals);
+            GoalsAsyncLoader loader = new GoalsAsyncLoader(getActivity(), helper, frmGoals, this);
             loader.execute();
     }
 
@@ -105,6 +108,20 @@ public class GoalsFragment extends Fragment implements View.OnClickListener {
             }catch(SQLException e){
                 Log.e(APP_TAG, "Unable to save goal", e);
             }
+        }
+    }
+
+    @Override
+    public void onItemSelectedByLongClick(Goal goal, GoalsListAdapter adapter,  View v) {
+        Toast.makeText(getActivity(),
+                String.format("Goal item with id %s selected", goal.getId()) , Toast.LENGTH_LONG).show();
+        try {
+            Dao dao = helper.getDao(Goal.class);
+            dao.delete(goal);
+            adapter.notifyDataSetChanged();
+            frmGoals.invalidate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }

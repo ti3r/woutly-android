@@ -18,6 +18,8 @@ package org.woutly.android.loaders;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -26,6 +28,7 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.PreparedQuery;
 
 import org.woutly.android.adapters.GoalsListAdapter;
+import org.woutly.android.adapters.GoalsListItemSelectedListener;
 import org.woutly.android.db.entities.Goal;
 
 import java.sql.SQLException;
@@ -44,12 +47,15 @@ public class GoalsAsyncLoader extends AsyncTask<Void,Void,ListAdapter> {
     Dao goalsDao;
     Context context;
     ListView finalView;
+    GoalsListItemSelectedListener listener;
 
-    public GoalsAsyncLoader(Context context, OrmLiteSqliteOpenHelper helper, ListView listView) {
+    public GoalsAsyncLoader(Context context, OrmLiteSqliteOpenHelper helper, ListView listView,
+                            GoalsListItemSelectedListener listener) {
         try {
             this.goalsDao = helper.getDao(Goal.class);
             this.context = context;
             this.finalView = listView;
+            this.listener = listener;
         } catch (SQLException e) {
             Log.e(APP_TAG,"Error retrieving dao for goals async loader. Failing app",e);
             throw new ExceptionInInitializerError("Error initializing Goals Async Loader. " + e.getMessage());
@@ -81,6 +87,15 @@ public class GoalsAsyncLoader extends AsyncTask<Void,Void,ListAdapter> {
             throw new IllegalStateException("Illegal state List View is null");
         }
         finalView.setAdapter(stringArrayAdapter);
+        finalView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                if (listener == null)
+                    throw new IllegalStateException("Item selected from Goals list but listener null");
+                listener.onItemSelectedByLongClick((Goal) parent.getItemAtPosition(position), (GoalsListAdapter) parent.getAdapter(), view);
+                return false;
+            }
+        });
     }
 
     private Collection<Goal> loadGoals() throws SQLException {

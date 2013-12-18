@@ -20,7 +20,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.woutly.android.R;
@@ -71,14 +70,17 @@ public class GoalsListAdapter extends BaseAdapter{
      * @return View with the correct view.
      */
     private View buildView(int position, View convertView) {
-        if (convertView == null)
+        if (convertView == null){
             convertView = LayoutInflater.from(context).inflate(R.layout.fragment_goals_list_item, null);
+        }
         Goal goal = (Goal) getItem(position);
+        convertView.getBackground().setAlpha(75);
         TextView text = (TextView) convertView.findViewById(R.id.fragment_goals_list_item_txt_goal);
         text.setText(goal.getGoal());
-        ProgressBar prg = (ProgressBar) convertView.findViewById(R.id.fragment_goals_list_item_prg_progress);
-        prg.setProgress(75);
-        prg.setMax(100);
+        TextView progress = (TextView) convertView.findViewById(R.id.fragment_goals_list_item_txt_progress);
+        progress.setText(context.getString(R.string.fragment_goals_list_item_txt_progress));
+        progress.append("75%");
+
         return convertView;
     }
 }
