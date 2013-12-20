@@ -15,14 +15,8 @@
  */
 package org.woutly.android;
 
-import android.annotation.TargetApi;
-import android.media.audiofx.BassBoost;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
-import android.view.View;
-
-import roboguice.fragment.RoboFragment;
 
 /**
  * Main settings Fragment

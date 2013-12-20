@@ -27,6 +27,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.haarman.listviewanimations.swinginadapters.prepared.SwingRightInAnimationAdapter;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
@@ -97,6 +98,9 @@ public class GoalsFragment extends Fragment implements View.OnClickListener, Goa
         Dao dao = helper.getDao(Goal.class);
         Goal g = new Goal(edtGoal.getText().toString());
         dao.create(g);
+        SwingRightInAnimationAdapter adapter = ((SwingRightInAnimationAdapter)frmGoals.getAdapter());
+        ((GoalsListAdapter)adapter.getDecoratedBaseAdapter()).add(g);
+        adapter.notifyDataSetChanged();
     }
 
     //Click implementations
@@ -118,8 +122,6 @@ public class GoalsFragment extends Fragment implements View.OnClickListener, Goa
         try {
             Dao dao = helper.getDao(Goal.class);
             dao.delete(goal);
-            adapter.notifyDataSetChanged();
-            frmGoals.invalidate();
         } catch (SQLException e) {
             e.printStackTrace();
         }

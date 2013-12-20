@@ -17,12 +17,14 @@ package org.woutly.android.loaders;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.v7.appcompat.R;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import com.haarman.listviewanimations.swinginadapters.prepared.SwingRightInAnimationAdapter;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.stmt.PreparedQuery;
@@ -42,7 +44,7 @@ import static org.woutly.android.MainActivity.APP_TAG;
  *
  * @author Alexandro Blanco <ti3r.bubblenet@gmail.com>
  */
-public class GoalsAsyncLoader extends AsyncTask<Void,Void,ListAdapter> {
+public class GoalsAsyncLoader extends AsyncTask<Void,Void, SwingRightInAnimationAdapter> {
 
     Dao goalsDao;
     Context context;
@@ -63,39 +65,46 @@ public class GoalsAsyncLoader extends AsyncTask<Void,Void,ListAdapter> {
     }
 
     @Override
-    protected GoalsListAdapter doInBackground(Void... voids) {
+    protected SwingRightInAnimationAdapter doInBackground(Void... voids) {
         Collection<Goal> goals = null;
-        GoalsListAdapter adapter = null;
-        List<String> titles = new LinkedList<String>();
+        SwingRightInAnimationAdapter adapter = null;
         try {
             Log.d(APP_TAG,"Loading goals using back task. Thread name"+Thread.currentThread().getName());
             goals = loadGoals();
 
-            adapter =  new GoalsListAdapter(this.context, goals);
+            GoalsListAdapter tmpAdapter =  new GoalsListAdapter(context, goals);
+            SwingRightInAnimationAdapter tmpAdapter2 = new SwingRightInAnimationAdapter(tmpAdapter);
+
+            adapter = tmpAdapter2;
             Log.d(APP_TAG, "Adapter created: "+adapter.toString());
         } catch (SQLException e) {
             Log.e(APP_TAG,"Error while loading the goals",e);
+        } catch (Exception e){
+            Log.e(APP_TAG, "Exception caught while building adapters",e);
+            throw new IllegalStateException("Error while building list adapters",e);
         }
 
         return adapter;
     }
 
     @Override
-    protected void onPostExecute(ListAdapter stringArrayAdapter) {
+    protected void onPostExecute(SwingRightInAnimationAdapter stringArrayAdapter) {
         Log.d(APP_TAG, "Goals loaded " + stringArrayAdapter.getCount() + ". Current thread name " + Thread.currentThread().getName());
         if (finalView == null){
             throw new IllegalStateException("Illegal state List View is null");
         }
+        stringArrayAdapter.setAbsListView(finalView);
         finalView.setAdapter(stringArrayAdapter);
-        finalView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                if (listener == null)
-                    throw new IllegalStateException("Item selected from Goals list but listener null");
-                listener.onItemSelectedByLongClick((Goal) parent.getItemAtPosition(position), (GoalsListAdapter) parent.getAdapter(), view);
-                return false;
-            }
-        });
+
+//        finalView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+//            @Override
+//            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+//                if (listener == null)
+//                    throw new IllegalStateException("Item selected from Goals list but listener null");
+//                listener.onItemSelectedByLongClick((Goal) parent.getItemAtPosition(position), (GoalsListAdapter) parent.getAdapter(), view);
+//                return false;
+//            }
+//        });
     }
 
     private Collection<Goal> loadGoals() throws SQLException {

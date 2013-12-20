@@ -16,12 +16,18 @@
 package org.woutly.android.adapters;
 
 import android.content.Context;
+import android.database.DataSetObserver;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import org.woutly.android.MainActivity;
 import org.woutly.android.R;
 import org.woutly.android.db.entities.Goal;
 
@@ -31,29 +37,29 @@ import java.util.Collection;
  * Adapter to display the Goals list in the Goals Fragment
  * @author Alexandro Blanco <ti3r.bubblenet@gmail.com>
  */
-public class GoalsListAdapter extends BaseAdapter{
+public class GoalsListAdapter extends ArrayAdapter<Goal>{
 
-    Collection<Goal> goals;
     Context context;
 
     public GoalsListAdapter(Context context, Collection<Goal> goals) {
+        super(context,R.layout.fragment_goals_list_item, goals.toArray(new Goal[]{}));
         this.context = context;
-        this.goals = goals;
-    }
-
-    @Override
-    public int getCount() {
-        return (goals != null)? goals.size() : 0;
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return (goals != null) ? goals.toArray()[position] : null;
     }
 
     @Override
     public long getItemId(int position) {
         return 0;
+    }
+
+    @Override
+    public boolean hasStableIds() {
+        return true;
+    }
+
+    @Override
+    public void add(Goal object) {
+        Log.d(MainActivity.APP_TAG, "Adding goal to adapter");
+
     }
 
     @Override
@@ -70,17 +76,29 @@ public class GoalsListAdapter extends BaseAdapter{
      * @return View with the correct view.
      */
     private View buildView(int position, View convertView) {
+        ViewHolder holder = null;
         if (convertView == null){
             convertView = LayoutInflater.from(context).inflate(R.layout.fragment_goals_list_item, null);
+            holder = new ViewHolder();
+            holder.goal = (TextView) convertView.findViewById(R.id.fragment_goals_list_item_txt_goal);
+            holder.progress = (TextView) convertView.findViewById(R.id.fragment_goals_list_item_txt_progress);
+            holder.position = position;
+            convertView.setTag(holder);
         }
         Goal goal = (Goal) getItem(position);
+        holder = (ViewHolder) convertView.getTag();
         convertView.getBackground().setAlpha(75);
-        TextView text = (TextView) convertView.findViewById(R.id.fragment_goals_list_item_txt_goal);
-        text.setText(goal.getGoal());
-        TextView progress = (TextView) convertView.findViewById(R.id.fragment_goals_list_item_txt_progress);
-        progress.setText(context.getString(R.string.fragment_goals_list_item_txt_progress));
-        progress.append("75%");
+        holder.goal.setText(goal.getGoal());
+        holder.progress.setText(context.getString(R.string.fragment_goals_list_item_txt_progress));
+        holder.progress.append("75%");
 
         return convertView;
+    }
+
+    //View Holder pattern implementation
+    static class ViewHolder{
+        TextView goal;
+        TextView progress;
+        int position;
     }
 }
