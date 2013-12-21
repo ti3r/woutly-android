@@ -32,34 +32,57 @@ import org.woutly.android.R;
 import org.woutly.android.db.entities.Goal;
 
 import java.util.Collection;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Adapter to display the Goals list in the Goals Fragment
  * @author Alexandro Blanco <ti3r.bubblenet@gmail.com>
  */
-public class GoalsListAdapter extends ArrayAdapter<Goal>{
+public class GoalsListAdapter extends BaseAdapter{
 
     Context context;
+    Map<Integer, Goal> mIdsMap = new TreeMap<Integer, Goal>();
 
     public GoalsListAdapter(Context context, Collection<Goal> goals) {
-        super(context,R.layout.fragment_goals_list_item, goals.toArray(new Goal[]{}));
+        super();
         this.context = context;
+        buildIdsMap(goals);
+    }
+
+    private void buildIdsMap(Collection<Goal> goals) {
+        int x = 0;
+        for(Goal g : goals){
+            mIdsMap.put(x++ , g);
+        }
+    }
+
+    public void addItem(Goal goal){
+        mIdsMap.put(mIdsMap.size() - 1 , goal);
+    }
+
+    @Override
+    public int getCount() {
+        return mIdsMap.size();
+    }
+
+    @Override
+    public Goal getItem(int i) {
+        return (mIdsMap.containsKey(i)) ? mIdsMap.get(i) : null;
     }
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        Goal g = null;
+        if (mIdsMap.containsKey(position)){
+            g = mIdsMap.get(position);
+        }
+        return (g != null) ? g.getId() : 0;
     }
 
     @Override
     public boolean hasStableIds() {
         return true;
-    }
-
-    @Override
-    public void add(Goal object) {
-        Log.d(MainActivity.APP_TAG, "Adding goal to adapter");
-
     }
 
     @Override

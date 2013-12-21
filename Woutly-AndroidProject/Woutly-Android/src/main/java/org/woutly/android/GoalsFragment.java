@@ -99,7 +99,7 @@ public class GoalsFragment extends Fragment implements View.OnClickListener, Goa
         Goal g = new Goal(edtGoal.getText().toString());
         dao.create(g);
         SwingRightInAnimationAdapter adapter = ((SwingRightInAnimationAdapter)frmGoals.getAdapter());
-        ((GoalsListAdapter)adapter.getDecoratedBaseAdapter()).add(g);
+        ((GoalsListAdapter)adapter.getDecoratedBaseAdapter()).addItem(g);
         adapter.notifyDataSetChanged();
     }
 
