@@ -17,13 +17,15 @@ package org.woutly.android.loaders;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.support.v7.appcompat.R;
 import android.util.Log;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.haarman.listviewanimations.itemmanipulation.OnDismissCallback;
+import com.haarman.listviewanimations.itemmanipulation.SwipeDismissAdapter;
 import com.haarman.listviewanimations.swinginadapters.prepared.SwingRightInAnimationAdapter;
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
@@ -35,8 +37,6 @@ import org.woutly.android.db.entities.Goal;
 
 import java.sql.SQLException;
 import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
 
 import static org.woutly.android.MainActivity.APP_TAG;
 /**
@@ -49,15 +49,12 @@ public class GoalsAsyncLoader extends AsyncTask<Void,Void, SwingRightInAnimation
     Dao goalsDao;
     Context context;
     ListView finalView;
-    GoalsListItemSelectedListener listener;
 
-    public GoalsAsyncLoader(Context context, OrmLiteSqliteOpenHelper helper, ListView listView,
-                            GoalsListItemSelectedListener listener) {
+    public GoalsAsyncLoader(Context context, OrmLiteSqliteOpenHelper helper, ListView listView) {
         try {
             this.goalsDao = helper.getDao(Goal.class);
             this.context = context;
             this.finalView = listView;
-            this.listener = listener;
         } catch (SQLException e) {
             Log.e(APP_TAG,"Error retrieving dao for goals async loader. Failing app",e);
             throw new ExceptionInInitializerError("Error initializing Goals Async Loader. " + e.getMessage());
@@ -74,7 +71,12 @@ public class GoalsAsyncLoader extends AsyncTask<Void,Void, SwingRightInAnimation
 
             GoalsListAdapter tmpAdapter =  new GoalsListAdapter(context, goals);
             SwingRightInAnimationAdapter tmpAdapter2 = new SwingRightInAnimationAdapter(tmpAdapter);
-
+            SwipeDismissAdapter tmpAdapter3 = new SwipeDismissAdapter(tmpAdapter, new OnDismissCallback() {
+                @Override
+                public void onDismiss(AbsListView absListView, int[] ints) {
+                    Toast.makeText(context, "Dismissed", Toast.LENGTH_LONG).show();
+                }
+            });
             adapter = tmpAdapter2;
             Log.d(APP_TAG, "Adapter created: "+adapter.toString());
         } catch (SQLException e) {
@@ -96,15 +98,6 @@ public class GoalsAsyncLoader extends AsyncTask<Void,Void, SwingRightInAnimation
         stringArrayAdapter.setAbsListView(finalView);
         finalView.setAdapter(stringArrayAdapter);
 
-//        finalView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-//            @Override
-//            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-//                if (listener == null)
-//                    throw new IllegalStateException("Item selected from Goals list but listener null");
-//                listener.onItemSelectedByLongClick((Goal) parent.getItemAtPosition(position), (GoalsListAdapter) parent.getAdapter(), view);
-//                return false;
-//            }
-//        });
     }
 
     private Collection<Goal> loadGoals() throws SQLException {

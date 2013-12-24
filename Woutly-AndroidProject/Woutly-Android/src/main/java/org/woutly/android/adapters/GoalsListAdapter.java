@@ -58,7 +58,7 @@ public class GoalsListAdapter extends BaseAdapter{
     }
 
     public void addItem(Goal goal){
-        mIdsMap.put(mIdsMap.size() - 1 , goal);
+        mIdsMap.put(mIdsMap.size(), goal);
     }
 
     @Override
@@ -73,11 +73,8 @@ public class GoalsListAdapter extends BaseAdapter{
 
     @Override
     public long getItemId(int position) {
-        Goal g = null;
-        if (mIdsMap.containsKey(position)){
-            g = mIdsMap.get(position);
-        }
-        return (g != null) ? g.getId() : 0;
+        //Goal g = getItem(position);
+        return position                ;//(g != null) ? g.getId() : 0;
     }
 
     @Override

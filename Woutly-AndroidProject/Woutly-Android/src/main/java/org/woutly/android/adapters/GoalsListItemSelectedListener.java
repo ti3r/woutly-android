@@ -16,6 +16,7 @@
 package org.woutly.android.adapters;
 
 import android.view.View;
+import android.widget.BaseAdapter;
 
 import org.woutly.android.db.entities.Goal;
 
@@ -26,5 +27,5 @@ import org.woutly.android.db.entities.Goal;
  * @author Alexandro Blanco <ti3r.bubblenet@gmail.com>
  */
 public interface GoalsListItemSelectedListener{
-    public void onItemSelectedByLongClick(Goal goal, GoalsListAdapter adapter, View v);
+    public void onItemSelectedByLongClick(Goal goal, BaseAdapter adapter, View v);
 }

@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -46,7 +47,7 @@ import static org.woutly.android.MainActivity.APP_TAG;
  *
  * @author Alexandro Blanco <ti3r.bubblenet@gmail.com>
  */
-public class GoalsFragment extends Fragment implements View.OnClickListener, GoalsListItemSelectedListener {
+public class GoalsFragment extends Fragment implements View.OnClickListener {
 
     EditText edtGoal = null;
     Button btnAdd = null;
@@ -69,7 +70,7 @@ public class GoalsFragment extends Fragment implements View.OnClickListener, Goa
     }
 
     private void executeloadGoals() {
-            GoalsAsyncLoader loader = new GoalsAsyncLoader(getActivity(), helper, frmGoals, this);
+            GoalsAsyncLoader loader = new GoalsAsyncLoader(getActivity(), helper, frmGoals);
             loader.execute();
     }
 
@@ -115,15 +116,4 @@ public class GoalsFragment extends Fragment implements View.OnClickListener, Goa
         }
     }
 
-    @Override
-    public void onItemSelectedByLongClick(Goal goal, GoalsListAdapter adapter,  View v) {
-        Toast.makeText(getActivity(),
-                String.format("Goal item with id %s selected", goal.getId()) , Toast.LENGTH_LONG).show();
-        try {
-            Dao dao = helper.getDao(Goal.class);
-            dao.delete(goal);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 }
